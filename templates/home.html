@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="post" action="{{ reverse_url("user") }}">
+    <p>username <input type="text" name="username"/></p>
+    <p>password <input type="password" name="password"/></p>
+    <p><button type="submit">提交</button></p>
+    {% module  xsrf_form_html()%}
+</form>
+
+{% end %}

@@ -1,0 +1,44 @@
+
+upstream haproxy_tornado {
+  server  0.0.0.0:8101;
+  server  0.0.0.0:8102;
+  server  0.0.0.0:8103;
+  server  0.0.0.0:8104;
+  server  0.0.0.0:8105;
+  server  0.0.0.0:8106;
+  server  0.0.0.0:8107;
+  server  0.0.0.0:8108;
+}
+
+server {
+	listen 80;
+	root /var/www/haproxy_tornado/;
+	index index.html index.htm;
+	server_name localhost;
+	access_log /var/log/nginx/haproxy_tornado_access.log;
+	error_log /var/log/nginx/haproxy_tornado_error.log;
+	location ~ ^(/static/) {
+        root /var/www/haproxy_tornado/;
+        expires 7d;
+        access_log   off;
+    }
+
+    location ~ ^(/media/).*\.(jpg|jpeg|png|gif)$ {
+        root /var/www/haproxy_tornado//;
+        expires 15d;
+        access_log   off;
+        try_files $uri =404 /static/empty.gif;
+    }
+
+    location ~* ^.+\.(jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js|mov) {
+        access_log   off;
+    }
+
+	location / {
+		proxy_pass         http://haproxy_tornado;
+        proxy_set_header   Host             $host;
+        proxy_set_header   X-Real-IP        $remote_addr;
+        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+	}
+}
+

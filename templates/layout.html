@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {% block head %}{% end %}
+</head>
+<body>
+<p>PORT:{{port}}</p>
+    {% block content %}{% end %}
+
+    <script src="{{ static_url('bower_components/jquery/dist/jquery.js') }}"></script>
+    {% block script %}
+
+    {% end %}
+</body>
+</html>
